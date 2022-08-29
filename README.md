@@ -1,7 +1,7 @@
 # Tunneler-CustomCommand
 make tunnelr custom commands
 
-# DOCS
+# Example
 
 ```lua
 local TCC = loadstring(game:HttpGet('https://raw.githubusercontent.com/TrhRichard/Tunneler-CustomCommand/main/main.lua'))()
