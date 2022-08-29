@@ -10,8 +10,8 @@ end
 
 local event = makeCustomCommand.Event:Connect(function(name, callback)
 	local helpcommand = game.ReplicatedStorage.DebugCommand.setlevel
-	if game.ReplicatedStorage.DebugCommand:FindFirstChild(name) then
-		game.ReplicatedStorage.DebugCommand:FindFirstChild(name):Destroy()
+	if game.ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
+		game.ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()):Destroy()
 	end
 	local command = helpcommand:Clone()
 	command.Name = name:lower()
@@ -25,8 +25,8 @@ TCC.createCommand = function(name:string, callback)
 end
 
 TCC.runCommand = function(name: string, args: {})
-	if not game.ReplicatedStorage.DebugCommand:FindFirstChild(name) then
-		warn(string.format("Command \"%s\" does not exist", name))
+	if not game.ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
+		warn(string.format("Command \"%s\" does not exist", name:lower()))
 		return
 	end
 	
