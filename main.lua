@@ -24,4 +24,14 @@ TCC.createCommand = function(name:string, callback)
 	event:Disconnect()
 end
 
+TCC.runCommand = function(name: string, args: {})
+	if not game.ReplicatedStorage.DebugCommand:FindFirstChild(name) then
+		warn(string.format("Command \"%s\" does not exist", name))
+		return
+	end
+	
+	args = args or {}
+	require(game.ReplicatedStorage.DebugCommand:WaitForChild(name)).runCommand(args)
+end
+
 return TCC
