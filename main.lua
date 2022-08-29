@@ -14,9 +14,9 @@ local event = makeCustomCommand.Event:Connect(function(name, callback)
 		game.ReplicatedStorage.DebugCommand:FindFirstChild(name):Destroy()
 	end
 	local command = helpcommand:Clone()
-	command.Name = name
+	command.Name = name:lower()
 	command.Parent = game.ReplicatedStorage.DebugCommand
-	require(game.ReplicatedStorage.DebugCommand:WaitForChild(name)).runCommand = callback
+	require(game.ReplicatedStorage.DebugCommand:WaitForChild(name:lower())).runCommand = callback
 end)
 
 TCC.createCommand = function(name:string, callback)
