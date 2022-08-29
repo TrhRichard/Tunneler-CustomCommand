@@ -20,8 +20,8 @@ local TCC = loadstring(game:HttpGet('https://raw.githubusercontent.com/TrhRichar
 TCC.createCommand("test", function(args)
 	-- just normal code
 	return "!DEVERROR!wow this is red"
-	-- !DEVERROR! before string makes the output red!!!!!
 	-- return a string so that it appears in the console
+	-- !DEVERROR! before the rest of the string makes the output red!!!!!
 
 end)
 
