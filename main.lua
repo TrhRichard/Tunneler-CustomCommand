@@ -29,9 +29,34 @@ TCC.runCommand = function(name: string, args: {})
 		warn(string.format("Command \"%s\" does not exist", name:lower()))
 		return
 	end
-	
+
 	args = args or {}
 	require(game.ReplicatedStorage.DebugCommand:WaitForChild(name)).runCommand(args)
+end
+
+local UIS = game:GetService("UserInputService")
+TCC.bindKeyToCommand = function(name: string, args: {}, key: Enum.KeyCode)
+	if not game.ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
+		warn(string.format("Command \"%s\" does not exist", name:lower()))
+		return
+	end
+
+	if table.find(_G.keysbinded, key) then
+		warn(string.format("Key %s already binded!", tostring(key)))
+		return
+	end
+
+	args = args or {}
+
+	table.insert(_G.keysbinded, key)
+
+	UIS.InputBegan:Connect(function(inp, gpe)
+		if gpe then return end
+
+		if inp.KeyCode == key then
+			TCC.runCommand(name, args)
+		end
+	end)
 end
 
 return TCC
