@@ -40,6 +40,8 @@ TCC.bindKeyToCommand = function(name: string, args: {}, key: Enum.KeyCode)
 		warn(string.format("Command \"%s\" does not exist", name:lower()))
 		return
 	end
+	
+	_G.keysbinded = _G.keysbinded or {}
 
 	if table.find(_G.keysbinded, key) then
 		warn(string.format("Key %s already binded!", tostring(key)))
