@@ -3,8 +3,14 @@ make tunnelr custom commands
 
 ## DOCS
 
+Create a Command
 ```lua
 TCC.createCommand(name <string>, callback <function>)
+```
+
+Run a Command
+```lua
+TCC.runCommand(name <string>, args <table>: optional)
 ```
 
 ## Example
