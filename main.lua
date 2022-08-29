@@ -10,6 +10,9 @@ end
 
 local event = makeCustomCommand.Event:Connect(function(name, callback)
 	local helpcommand = game.ReplicatedStorage.DebugCommand.setlevel
+	if game.ReplicatedStorage.DebugCommand:FindFirstChild(name) then
+		game.ReplicatedStorage.DebugCommand:FindFirstChild(name):Destroy()
+	end
 	local command = helpcommand:Clone()
 	command.Name = name
 	command.Parent = game.ReplicatedStorage.DebugCommand
