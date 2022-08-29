@@ -17,6 +17,7 @@ Bind Key to Command *(cant unbind sorry im lazy)*
 ```lua
 TCC.bindKeyToCommand(name <string>, args <table>, key: Enum.KeyCode)
 ```
+*you can use* ```_G.keysbinded = {}``` *to reset it yourself though*
 
 ## Example
 
