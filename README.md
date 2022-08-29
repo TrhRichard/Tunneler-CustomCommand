@@ -13,6 +13,11 @@ Run a Command
 TCC.runCommand(name <string>, args <table>: optional)
 ```
 
+Bind Key to Command *(cant unbind sorry im lazy)*
+```lua
+TCC.bindKeyToCommand(name <string>, args <table>, key: Enum.KeyCode)
+```
+
 ## Example
 
 ```lua
@@ -25,5 +30,6 @@ TCC.createCommand("test", function(args)
 
 end)
 
+TCC.bindKeyToCommand("test", {}, Enum.KeyCode.F)
 TCC.runCommand("setlevel", {"devtest_pool"})
 ```
