@@ -1,64 +1,79 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
+
 local TCC = {}
 
+_G.keysbinded = {}
+
 local makeCustomCommand
-if not game.ReplicatedStorage:FindFirstChild("makeCustomCommand") then
-	makeCustomCommand = Instance.new("BindableEvent",game.ReplicatedStorage)
+if not ReplicatedStorage:FindFirstChild("makeCustomCommand") then
+	makeCustomCommand = Instance.new("BindableEvent")
+	makeCustomCommand.Parent = ReplicatedStorage
 	makeCustomCommand.Name = "makeCustomCommand"
 else
-	makeCustomCommand = game.ReplicatedStorage:FindFirstChild("makeCustomCommand")
+	makeCustomCommand = ReplicatedStorage:FindFirstChild("makeCustomCommand")
 end
 
 local event = makeCustomCommand.Event:Connect(function(name, callback)
-	local helpcommand = game.ReplicatedStorage.DebugCommand.setlevel
-	if game.ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
-		game.ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()):Destroy()
+	local helpcommand = ReplicatedStorage.DebugCommand.setlevel
+	
+	if ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
+		ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()):Destroy()
 	end
+
 	local command = helpcommand:Clone()
 	command.Name = name:lower()
-	command.Parent = game.ReplicatedStorage.DebugCommand
-	require(game.ReplicatedStorage.DebugCommand:WaitForChild(name:lower())).runCommand = callback
+	command.Parent = ReplicatedStorage.DebugCommand
+	
+	require(ReplicatedStorage.DebugCommand:WaitForChild(name:lower())).runCommand = callback
 end)
 
-TCC.createCommand = function(name:string, callback)
+TCC.createCommand = function(name: string, callback)
 	makeCustomCommand:Fire(name, callback)
 	event:Disconnect()
 end
 
-TCC.runCommand = function(name: string, args: {})
-	if not game.ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
+TCC.runCommand = function(name: string, args: {}?)
+	if not ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
 		warn(string.format("Command \"%s\" does not exist", name:lower()))
 		return
 	end
 
 	args = args or {}
-	require(game.ReplicatedStorage.DebugCommand:WaitForChild(name)).runCommand(args)
+	require(ReplicatedStorage.DebugCommand:WaitForChild(name)).runCommand(args)
 end
 
-local UIS = game:GetService("UserInputService")
-TCC.bindKeyToCommand = function(name: string, args: {}, key: Enum.KeyCode)
-	if not game.ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
+TCC.bindKeyToCommand = function(name: string, key: Enum.KeyCode, args: {}?)
+	if not ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
 		warn(string.format("Command \"%s\" does not exist", name:lower()))
 		return
 	end
-	
-	_G.keysbinded = _G.keysbinded or {}
 
-	if table.find(_G.keysbinded, key) then
+	if _G.keysbinded[key] ~= null then
 		warn(string.format("Key %s already binded!", tostring(key)))
 		return
 	end
 
-	args = args or {}
-
-	table.insert(_G.keysbinded, key)
-
-	UIS.InputBegan:Connect(function(inp, gpe)
+	local connection = UserInputService.InputBegan:Connect(function(inp, gpe)
 		if gpe then return end
 
 		if inp.KeyCode == key then
-			TCC.runCommand(name, args)
+			TCC.runCommand(name, args or {})
 		end
 	end)
+
+	_G.keysbinded[key] = {
+		connection: connection
+	} -- add more to this table if you need to
+end
+
+TCC.unbindKey = function(key: Enum.KeyCode)
+	if _G.keysbinded[key] ~= null then
+		_G.keysbinded[key].connection:Disconnect() -- no memory leaks richard
+		_G.keysbinded[key] = null
+	else
+		warn(string.format("Key %s is not binded!", tostring(key)))
+	end
 end
 
 return TCC

@@ -5,24 +5,33 @@ make tunnelr custom commands
 
 Create a Command
 ```lua
-TCC.createCommand(name <string>, callback <function>)
+TCC.createCommand(name: string, callback: function)
 ```
 
 Run a Command
 ```lua
-TCC.runCommand(name <string>, args <table>: optional)
+TCC.runCommand(
+	name: string,
+	args: table? -- optional
+)
 ```
 
-Bind Key to Command *(cant unbind sorry im lazy)*
+Bind and unbind key to command
 ```lua
-TCC.bindKeyToCommand(name <string>, args <table>, key: Enum.KeyCode)
+TCC.bindKeyToCommand(
+	name: string,
+	key: Enum.KeyCode,
+	args: table? -- optional
+)
+
+TCC.unbindKey(key: Enum.KeyCode)
 ```
-*you can use* ```_G.keysbinded = {}``` *to reset it yourself though*
 
 ## Example
 
 ```lua
 local TCC = loadstring(game:HttpGet('https://raw.githubusercontent.com/TrhRichard/Tunneler-CustomCommand/main/main.lua'))()
+
 TCC.createCommand("test", function(args)
 	-- just normal code
 	return "!DEVERROR!wow this is red"
@@ -31,6 +40,6 @@ TCC.createCommand("test", function(args)
 
 end)
 
-TCC.bindKeyToCommand("test", {}, Enum.KeyCode.F)
+TCC.bindKeyToCommand("test", Enum.KeyCode.F)
 TCC.runCommand("setlevel", {"devtest_pool"})
 ```
