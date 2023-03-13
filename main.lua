@@ -15,17 +15,17 @@ else
 end
 
 local event = makeCustomCommand.Event:Connect(function(name, callback)
-	local helpcommand = ReplicatedStorage.DebugCommand.setlevel
+	local helpcommand = ReplicatedStorage.DebugCommands.setlevel
 	
-	if ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
-		ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()):Destroy()
+	if ReplicatedStorage.DebugCommands:FindFirstChild(name:lower()) then
+		ReplicatedStorage.DebugCommands:FindFirstChild(name:lower()):Destroy()
 	end
 
 	local command = helpcommand:Clone()
 	command.Name = name:lower()
-	command.Parent = ReplicatedStorage.DebugCommand
+	command.Parent = ReplicatedStorage.DebugCommands
 	
-	require(ReplicatedStorage.DebugCommand:WaitForChild(name:lower())).runCommand = callback
+	require(ReplicatedStorage.DebugCommands:WaitForChild(name:lower())).runCommand = callback
 end)
 
 TCC.createCommand = function(name: string, callback)
@@ -34,17 +34,17 @@ TCC.createCommand = function(name: string, callback)
 end
 
 TCC.runCommand = function(name: string, args: {}?)
-	if not ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
+	if not ReplicatedStorage.DebugCommands:FindFirstChild(name:lower()) then
 		warn(string.format("Command \"%s\" does not exist", name:lower()))
 		return
 	end
 
 	args = args or {}
-	require(ReplicatedStorage.DebugCommand:WaitForChild(name)).runCommand(args)
+	require(ReplicatedStorage.DebugCommands:WaitForChild(name)).runCommand(args)
 end
 
 TCC.bindKeyToCommand = function(name: string, key: Enum.KeyCode, args: {}?)
-	if not ReplicatedStorage.DebugCommand:FindFirstChild(name:lower()) then
+	if not ReplicatedStorage.DebugCommands:FindFirstChild(name:lower()) then
 		warn(string.format("Command \"%s\" does not exist", name:lower()))
 		return
 	end
@@ -63,7 +63,7 @@ TCC.bindKeyToCommand = function(name: string, key: Enum.KeyCode, args: {}?)
 	end)
 
 	_G.keysbinded[key] = {
-		connection: connection
+		connection= connection
 	} -- add more to this table if you need to
 end
 
